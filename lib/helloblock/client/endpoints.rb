@@ -21,19 +21,16 @@ module HelloBlock
       end
 
       # client.unspents(addresses: ...) => method_missing(:unspents, addresses: ... )
-
       def method_missing(method, *args, &block)
         endpoint_defined?(method) ? navigate_to_path(method, args[0]) : super
       end
 
       # :unspents => UNSPENTS_PATH
-
       def endpoint_defined?(method)
         Endpoints.constants.include?("#{method.upcase}_PATH".to_sym)
       end
 
       # get(UNSPENTS_PATH, addresses: ...)
-
       def navigate_to_path(method, *args)
         path = Endpoints.const_get("#{method.upcase}_PATH".to_sym)
         post_request?(method) ? post(path, body: args[0]) : get(path, args[0])
